@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/styles/connection/login-register.css">
+    <script src="https://www.google.com/recaptcha/api.js?render=6LcC_I8qAAAAALhk9qZg7GiYdwkmzMy6RRt_8Z3L"></script>
+</head>
+<body>
+    <div class="form-container">
+        <form id="login-form" action="/auth/login" method="POST">
+            <h2>Login</h2>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+
+            <p>Don't have an account? <a href="/pages/register">Register here</a></p>
+        </form>
+    </div>
+    <script src="/scripts/login.js"></script>
+</body>
+</html>
