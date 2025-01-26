@@ -1,0 +1,38 @@
+name: CI Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Étape 1 : Vérifier le code source
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Étape 2 : Vérifier le Dockerfile
+      - name: Lint Dockerfile
+        uses: hadolint/hadolint-action@v2
+        with:
+          dockerfile: ./Dockerfile
+
+      # Étape 3 : Construire et démarrer les services
+      - name: Build and run Docker containers
+        run: |
+          docker-compose up --build -d
+          docker-compose ps
+
+      # Étape 4 : Tests (optionnel)
+      # Remplace "npm test" par une commande correspondant à tes tests.
+      - name: Run tests
+        run: |
+          docker-compose exec app npm test
+
+      # Étape 5 : Arrêter les containers
+      - name: Stop Docker containers
+        if: always()
+        run: docker-compose down
