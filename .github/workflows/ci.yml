@@ -16,7 +16,7 @@ jobs:
 
       # Étape 2 : Vérifier le Dockerfile
       - name: Lint Dockerfile
-        uses: hadolint/hadolint-action@v3
+        uses: hadolint/hadolint-action@v1
         with:
           dockerfile: ./Dockerfile
 
