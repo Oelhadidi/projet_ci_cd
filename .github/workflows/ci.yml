@@ -10,33 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Étape 1 : Vérifier le code source
+      # 1️⃣ Vérifier le code source
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Étape 2 : Vérifier le Dockerfile
-      - name: Lint Dockerfile
-        uses: hadolint/hadolint-action@v2.0.0
-        with:
-          dockerfile: ./Dockerfile
+      # 2️⃣ Installer Docker et Docker Compose
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
 
-      # Étape 3 : Construire et démarrer les services
+      # 3️⃣ Vérifier le Dockerfile avec Hadolint
+      - name: Lint Dockerfile
+        run: docker run --rm -i hadolint/hadolint < Dockerfile
+
+      # 4️⃣ Construire et démarrer les containers
       - name: Build and run Docker containers
         run: |
           docker compose up --build -d
-          docker compose ps
-      
-      - name: Vérifier les logs du conteneur DB
-        run: docker logs projet_ci_cd-db-1
+          sleep 15  # Attendre que MySQL démarre avant d'afficher les logs
 
+      # 5️⃣ Vérifier les logs du conteneur MySQL
+      - name: Check MySQL logs
+        run: docker logs $(docker ps --filter "name=db" --format "{{.ID}}")
 
-      # Étape 4 : Tests (optionnel)
-      # Remplace "npm test" par une commande correspondant à tes tests.
-      #- name: Run tests
-      # run: |
-      #    docker compose exec app npm test
+      # 6️⃣ (Optionnel) Lancer des tests unitaires si disponibles
+      # - name: Run tests
+      #   run: docker compose exec app npm test
 
-      # Étape 5 : Arrêter les containers
+      # 7️⃣ Arrêter et nettoyer les containers
       - name: Stop Docker containers
         if: always()
         run: docker compose down
