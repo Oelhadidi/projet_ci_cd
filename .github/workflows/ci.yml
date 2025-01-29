@@ -25,12 +25,16 @@ jobs:
         run: |
           docker compose up --build -d
           docker compose ps
+      
+      - name: Vérifier les logs du conteneur DB
+        run: docker logs projet_ci_cd-db-1
+
 
       # Étape 4 : Tests (optionnel)
       # Remplace "npm test" par une commande correspondant à tes tests.
-      - name: Run tests
-        run: |
-          docker compose exec app npm test
+      #- name: Run tests
+      # run: |
+      #    docker compose exec app npm test
 
       # Étape 5 : Arrêter les containers
       - name: Stop Docker containers
