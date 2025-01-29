@@ -23,8 +23,8 @@ jobs:
       # Étape 3 : Construire et démarrer les services
       - name: Build and run Docker containers
         run: |
-          docker-compose up --build -d
-          docker-compose ps
+          docker compose up --build -d
+          docker compose ps
 
       # Étape 4 : Tests (optionnel)
       # Remplace "npm test" par une commande correspondant à tes tests.
