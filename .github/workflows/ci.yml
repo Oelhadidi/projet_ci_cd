@@ -31,13 +31,13 @@ jobs:
       # 5️ Vérifier les logs du conteneur MySQL
       - name: Check MySQL logs
         if: always()
-        run: docker logs $(docker ps --filter "name=db" --format "{{.ID}}")
+        run: docker logs projet_ci_cd-db-1
       
       #5.2
       - name: Vérifier les conteneurs en cours d'exécution
         if: always()
         run: docker ps -a
-        
+
       # 6️ (Optionnel) Lancer des tests unitaires si disponibles
       # - name: Run tests
       #   run: docker compose exec app npm test
