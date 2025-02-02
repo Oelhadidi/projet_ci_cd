@@ -11,6 +11,10 @@ on:
     tags:
       - "v*"
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -37,6 +41,8 @@ jobs:
   create-release:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
 
@@ -57,10 +63,11 @@ jobs:
       - name: Generate Release Notes
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           generate_release_notes: true
           name: "Release ${{ github.ref_name }}"
-          token: ${{ secrets.TOKEN }}
           tag_name: ${{ github.ref_name }}
           body: |
             ## Release ${{ github.ref_name }}
