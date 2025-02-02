@@ -51,3 +51,4 @@ docker compose up -d
 ```bash
 docker logs mon-app
 ```
+.
