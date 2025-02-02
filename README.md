@@ -45,4 +45,4 @@ docker pull elhadido/my-app:latest
 ```bash
 docker compose up -d
 ```
-
+.
