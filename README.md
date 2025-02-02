@@ -1,7 +1,7 @@
 # Projet CI/CD
 
 ## Équipe
-- OMAR ALHADIDI -  CI
+- OMAR ELHADIDI -  CI
 - BOUTAGJAT BRAHIM -  CD
 
 

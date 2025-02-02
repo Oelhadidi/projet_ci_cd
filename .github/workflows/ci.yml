@@ -38,9 +38,9 @@ jobs:
         if: always()
         run: docker ps -a
 
-      # 6️ (Optionnel) Lancer des tests unitaires si disponibles
-      # - name: Run tests
-      #   run: docker compose exec app npm test
+      # 6️ Lancer Le test unitaire
+      - name: Run test
+        run: docker compose exec app npm test
 
       # 7️ Arrêter et nettoyer les containers
       - name: Stop Docker containers
