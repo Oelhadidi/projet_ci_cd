@@ -46,8 +46,3 @@ docker pull elhadido/my-app:latest
 docker compose up -d
 ```
 
-### En cas de Problème
-1. Vérifier les logs :
-```bash
-docker logs mon-app
-```
