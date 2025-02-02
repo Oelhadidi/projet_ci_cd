@@ -11,8 +11,8 @@
 1. Checkout du code
 2. Lint du Dockerfile avec Hadolint
 3. Build des containers Docker
-4. Tests de l'application
-5. Vérification des logs et containers
+4. Vérification des logs et containers
+5. Lancer un test
 
 ### CD (Déploiement Continu sur main)
 1. Build de l'image Docker
