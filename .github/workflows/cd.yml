@@ -1,35 +1,15 @@
 name: CD Workflow
 
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - "v*"
+  workflow_run:
+    workflows: ["CI Workflow"]
+    types:
+      - completed
 
 jobs:
-  ci-steps:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v2
-
-      - name: Lint Dockerfile
-        run: docker run --rm -i hadolint/hadolint < Dockerfile
-
-      - name: Build and test
-        run: |
-          docker compose up --build -d
-          sleep 15
-          docker compose ps
-          docker compose down
-
   deploy:
-    needs: ci-steps
-    if: github.ref == 'refs/heads/main' # Seulement sur main
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v3
 
@@ -39,34 +19,15 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push latest Docker image
+      - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
           tags: |
             elhadido/my-app:latest
-
-  release:
-    needs: ci-steps
-    if: startsWith(github.ref, 'refs/tags/v') # Seulement sur les tags
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and push release Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: |
-            elhadido/my-app:${{ github.ref_name }}
+            elhadido/my-app:${{ github.sha }}
+            ${{ startsWith(github.ref, 'refs/tags/') && format('elhadido/my-app:{0}', github.ref_name) || '' }}
 
       - name: Generate Release Notes
         uses: softprops/action-gh-release@v1
@@ -74,6 +35,3 @@ jobs:
           generate_release_notes: true
           name: "Release ${{ github.ref_name }}"
           token: ${{ secrets.TOKEN }}
-          tag_name: ${{ github.ref_name }}
-          body: |
-            ## Release ${{ github.ref_name }}
